@@ -40,5 +40,5 @@ button.onclick = function(){
     
     //Make the request
     request.open('GET', 'http:/praneeth919.imad.hasura-app.io/counter',true);
-    requests.send(null);
+    request.send(null);
 };
