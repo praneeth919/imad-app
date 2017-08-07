@@ -7,10 +7,10 @@ element.innerHTML= 'New Value';
 
 // Move the image
 var img = document.getElementById('lol');
-var marginLeft=0;
-function moveRight(){
+var marginLeft = 0;
+function moveRight() {
     marginLeft = marginLeft +5;
-    img.style.marginLleft = marginLeft + 'px';
+    img.style.marginLeft = marginLeft + 'px';
 }
 img.onclick= function() {
     var interval = setInterval(moveRight,50);
