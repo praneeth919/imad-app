@@ -17,6 +17,10 @@ var config = {
 var app = express();
 app.use(morgan('combined'));
 app.use(bodyParser.json());
+app.use(session({
+    secret: 'someRandomSecretValue',
+    cookie: {maxAge: 1000 * 60 *  60 * 24 * 30}
+}));
 
 var articles = {
         'article-one': {
@@ -134,6 +138,13 @@ app.post('/login', function(req,res){
                 var salt= dbString.split('$')[2]
                 var hashedPassword= hash(password, salt); //creating a hash based on the password submitted and the original salt
                 if(hashedPassword === dbString){
+                    
+                    //Set the session
+                    req.session.auth = {uesrId: result.rows[0].id}; 
+                    //set cookie with a session id
+                    //internally, on the server side, it mapsthe session id to an object
+                    //{auth: {userId}}
+                    
                     res.send('credentials correct');
                 } else{
                     res.send(403).send('username/password is invalid')
@@ -142,6 +153,14 @@ app.post('/login', function(req,res){
       }    
     });
     
+});
+
+app.get('/check-login',function(req,res){
+    if(req.session && req.session.auth && req.session.auth.userId){
+        res.send('You are logged in:' + req.session.auth.userId.toString());
+    } else{
+        res.send('You are not logged in');
+    }
 });
 
 var counter=0;
